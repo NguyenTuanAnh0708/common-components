@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Button from '@mui/material/Button';
+import axios from "axios";
 
 const GoogleCaptcha = () => {
     const [disabled, setDisabled] = useState(true)
@@ -17,11 +18,22 @@ const GoogleCaptcha = () => {
         console.log('render')
     })
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        // const inputVal = await e.target[0].value;
         const token = captchaRef.current.getValue();
-        console.log(token)
         captchaRef.current.reset();
+
+
+        await axios.post(`http://localhost:5000/api/v1/post`, { token })
+            .then(res => console.log(res))
+            .catch((err) => {
+                console.log(err);
+            })
+        // e.preventDefault();
+        // const token = captchaRef.current.getValue();
+        // console.log(token)
+        // captchaRef.current.reset();
     }
 
 
